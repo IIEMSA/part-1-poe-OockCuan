@@ -1,1 +1,7 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/CI6k5J4n)
+References for code
+
+Create ASP.NET Core Web Application with SQL Server Database Connection and CRUD Operations. 2023. YouTube video, added by Macro Code [online] Available at https://www.youtube.com/watch?v=rTM6Q000cLw&t=1132s [Accessed 3 April 2025]  
+The IIE. 2012. Information Systems 1B [INSY6112 Module Manual]. The Independant Institute of Education: Unpublished 
+Microsoft.com. (2023). System.InvalidOperationException: The ConnectionString property has not been initialized. ASP.NET Core 7 - Microsoft Q&A. [online] Available at: https://learn.microsoft.com/en-us/answers/questions/1187766/system-invalidoperationexception-the-connectionstr [Accessed 7 Apr. 2025]. Microsoft.com. (2023). System.InvalidOperationException: The ConnectionString property has not been initialized. ASP.NET Core 7 - Microsoft Q&A. [online] Available at: https://learn.microsoft.com/en-us/answers/questions/1187766/system-invalidoperationexception-the-connectionstr [Accessed 7 Apr. 2025]. 
+Mrzyglod, K. 2022. Azure for Developers: Implement rich Azure PaaS ecosystems using containers, serverless services, and storage solutions. 
