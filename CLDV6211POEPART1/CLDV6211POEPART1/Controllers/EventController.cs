@@ -37,8 +37,8 @@ namespace CLDV6211POEPART1.Controllers
 
         }
 //Actions taken when interacting with details
-        public async Task<IActionResult> Details(int? EventID){
-            var evente = await _context.Event.FirstOrDefaultAsync(m => m.EventID == EventID);
+        public async Task<IActionResult> Details(int? id){
+            var evente = await _context.Event.FirstOrDefaultAsync(m => m.EventID == id);
             if (evente == null){
                 return NotFound();}
             return View(evente);
@@ -95,13 +95,33 @@ namespace CLDV6211POEPART1.Controllers
             }
             return View(evente);
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id){
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
             var evente = await _context.Event.FindAsync(id);
+            if (evente == null) return NotFound();
+
+            var hasBookings = await _context.Booking.AnyAsync(b => b.EventID == id);
+            if (hasBookings)
+            {
+                TempData["ErrorMessage"] = "Cannot delete this item because it has existing bookings";
+                return RedirectToAction(nameof(Index));
+            }
+
             _context.Event.Remove(evente);
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Deleted successfully";
             return RedirectToAction(nameof(Index));
         }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> Delete(int id){
+        //    var evente = await _context.Event.FindAsync(id);
+        //    _context.Event.Remove(evente);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
     }
 }

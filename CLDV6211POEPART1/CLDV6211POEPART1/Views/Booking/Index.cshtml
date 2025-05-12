@@ -4,8 +4,18 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>Bookings</h1>
+<form asp-action="Index" method="get"> 
+    <div class="form-group"> 
+        <input type="text" name="searchString" class="form-control" placeholder="Search Bookings"/>
+     </div> 
+     <button type="submit" class="btn btn-primary mt-2">Search</button> 
+ </form> 
+ @if (TempData["SuccesMessage"] != null) { 
+   <div class="alert alert-success"> 
+         @TempData["SuccessMessage"] 
+    </div>
+ }
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -15,8 +25,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.EventID)
             </th>
+            @* <th> *@
+            @*     @Html.DisplayNameFor(model => model.VenueID) *@
+            @* </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.VenueID)
+                @Html.DisplayNameFor(model => model.Venue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Event)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.BookingDate)
@@ -30,9 +46,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.EventID)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VenueID)
-            </td>
+            @* <td> *@
+            @*     @Html.DisplayFor(modelItem => item.VenueID) *@
+            @* </td> *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Venue.VenueName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event.EventName)
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BookingDate)
             </td>

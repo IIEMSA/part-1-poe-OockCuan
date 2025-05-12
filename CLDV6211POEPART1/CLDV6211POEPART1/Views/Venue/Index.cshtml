@@ -6,6 +6,20 @@
 
 <h1>Venues</h1>
 
+@if (TempData["ErrorMessage"] != null)
+{ 
+    <div class="alert alert-danger">
+
+        @TempData["ErrorMessage"]
+    </div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+
+        @TempData["SuccessMessage"]
+    </div>
+}
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -21,27 +35,32 @@
             <th>
                 @Html.DisplayNameFor(model => model.Capacity)
             </th>
+            @* <th> *@
+            @*     @Html.DisplayNameFor(model => model.ImageURL) *@
+            @* </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.ImageURL)
+                VenueImage
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.VenueName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VenueLocation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Capacity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageURL)
-            </td>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VenueName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VenueLocation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Capacity)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageURL)) {
+                        <img src="@item.ImageURL" alt="Vene Image" width="150" height="150" style="object-fit:cover; border-radius:8px"/>
+                    } else{<span>no image</span>}
+                </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.VenueID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.VenueID">Details</a> |

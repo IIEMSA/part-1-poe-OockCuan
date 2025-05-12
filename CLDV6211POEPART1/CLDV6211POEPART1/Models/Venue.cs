@@ -1,4 +1,6 @@
-﻿namespace CLDV6211POEPART1.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CLDV6211POEPART1.Models
 {
     public class Venue
     {
@@ -12,5 +14,9 @@
         public int Capacity { get; set; }
 
         public string ImageURL { get; set; }
+
+        [NotMapped]
+
+        public IFormFile? ImageFile { get; set; }
     }
 }

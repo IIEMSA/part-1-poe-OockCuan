@@ -1,4 +1,5 @@
-﻿using CLDV6211POEPART1.Models;
+﻿using Azure.Storage.Blobs;
+using CLDV6211POEPART1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,21 +25,32 @@ namespace CLDV6211POEPART1.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Venue venue)
         {
             if (ModelState.IsValid)
             {
+                if (venue.ImageFile != null)
+                {
+                    var blobUrl = await UploadImageToBlobAsync(venue.ImageFile);
+                    venue.ImageURL= blobUrl;
+                }
+
                 _context.Add(venue);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Venue created successfully.";
                 return RedirectToAction(nameof(Index));
             }
             return View(venue);
-
         }
 
-        public async Task<IActionResult> Details(int? VenueID)
+        public async Task<IActionResult> Details(int? id)
         {
-            var venue = await _context.Venue.FirstOrDefaultAsync(m => m.VenueID == VenueID);
+            if (id == null) {
+                return NotFound();
+            }
+
+            var venue = await _context.Venue.FirstOrDefaultAsync(m => m.VenueID == id);
             if (venue == null)
             {
                 return NotFound();
@@ -78,29 +90,41 @@ namespace CLDV6211POEPART1.Controllers
             {
                 try
                 {
+                    if (venue.ImageFile != null)
+                    {
+                        
+                        var blobUrl = await UploadImageToBlobAsync(venue.ImageFile);
+
+                       
+                        venue.ImageURL = blobUrl;
+                    }
+                    else
+                    {
+                        
+                    }
+
                     _context.Update(venue);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Venue updated successfully.";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!VenueExists(venue.VenueID))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
-
             return View(venue);
         }
 
         //Actions taken when interacting with delete
         public async Task<IActionResult> Delete(int? id)
         {
+            if (id == null) {
+                return NotFound();
+            }
             var venue = await _context.Venue.FirstOrDefaultAsync(m => m.VenueID == id);
             if (venue == null)
             {
@@ -109,13 +133,37 @@ namespace CLDV6211POEPART1.Controllers
             return View(venue);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id)
-        {
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id) {
             var venue = await _context.Venue.FindAsync(id);
+            if (venue == null) { return NotFound(); }
+
+            var hasBookings = await _context.Booking.AnyAsync(b => b.VenueID == id);
+            if (hasBookings) {
+                TempData["ErrorMessage"] = "Cannot delete this item because it has existing bookings";
+                return RedirectToAction(nameof(Index));
+            }
+
             _context.Venue.Remove(venue);
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Deleted successfully";
             return RedirectToAction(nameof(Index));
+        }
+
+        //[HttpPost]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var venue = await _context.Venue.FindAsync(id);
+        //    _context.Venue.Remove(venue);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
+        private async Task<string> UploadImageToBlobAsync(IFormFile imageFile)
+        {
+            
+
+            return blobClient.Uri.ToString();
         }
     }
     }
